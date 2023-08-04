@@ -3,17 +3,18 @@ require('isomorphic-fetch');
 
 function addDestinationInfo(document, name, diameter, star, distance, moons, imageUrl) {
    // Here is the HTML formatting for our mission target div.
-   /*
-                <h2>Mission Destination</h2>
-                <ol>
-                    <li>Name: </li>
-                    <li>Diameter: </li>
-                    <li>Star: ${star}</li>
-                    <li>Distance from Earth: </li>
-                    <li>Number of Moons: </li>
-                </ol>
-                <img src="">
-   */
+   let missionTarget = document.getElementById('missionTarget')
+   missionTarget.innerHTML = `
+   <h2>Mission Destination</h2>
+   <ol>
+       <li>Name: ${missionPlanet.name}</li>
+       <li>Diameter: ${missionPlanet.diameter}</li>
+       <li>Star: ${missionPlanet.star}</li>
+       <li>Distance from Earth: ${missionPlanet.distance}</li>
+       <li>Number of Moons: ${missionPlanet.moons}</li>
+   </ol>
+   <img src=${missionPlanet.image} />
+   `
 }
 
 function validateInput(testInput) {
@@ -27,21 +28,17 @@ function validateInput(testInput) {
    }
 }
 
-function formSubmission(document , list, pilot, copilot, fuelLevel, cargoLevel) {
-    const pilot = document.querySelector("input[name=pilotName]")
-    const copilot = document.querySelector("input[name=copilotName]")
-    const fuelLevel = document.querySelector("input[name=fuelLevel]")
-    const cargoLevel = document.querySelector("input[name=cargoMass]")
-    const list = document.getElementById("faultyItems")
-    const launchStatus = document.getElementById("launchStatus")
-    const pilotStatus = document.getElementById("pilotStatus")
-    const copilotStatus = document.getElementById("copilotStatus")
-    const fuelStatus = document.getElementById("fuelStatus")
-    const cargoStatus = document.getElementById("cargoStatus")
+function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
     
     
     let form = document.querySelector("form");
     form.addEventListener("submit", function(event) {
+
+        const launchStatus = document.getElementById("launchStatus")
+        const pilotStatus = document.getElementById("pilotStatus")
+        const copilotStatus = document.getElementById("copilotStatus")
+        const fuelStatus = document.getElementById("fuelStatus")
+        const cargoStatus = document.getElementById("cargoStatus")
         
         if (validateInput(pilot.value) === "Empty" || validateInput(copilot.value) === "Empty" || validateInput(fuelLevel.value) === "Empty" || validateInput(cargoLevel.value) === "Empty") {
             alert("All fields are required!");
@@ -69,7 +66,7 @@ function formSubmission(document , list, pilot, copilot, fuelLevel, cargoLevel) 
         }
         
     });
-})
+}
 
    
 
@@ -77,15 +74,13 @@ function formSubmission(document , list, pilot, copilot, fuelLevel, cargoLevel) 
     
 
 async function myFetch() {
-    let planetsReturned;
-
-    planetsReturned = await fetch().then( function(response) {
-        });
-
-    return planetsReturned;
+    let response = await fetch('https://handlers.education.launchcode.org/static/planets.json');
+    let planetsData = await response.json();
+    console.log(planetsData);
 }
 
 function pickPlanet(planets) {
+    return Math.floor(Math.random()*planets)
 }
 
 
