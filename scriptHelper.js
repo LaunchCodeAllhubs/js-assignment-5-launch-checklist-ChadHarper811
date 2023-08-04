@@ -21,7 +21,7 @@ function validateInput(testInput) {
    if (testInput === "") {
     return "Empty"
    } else if (isNaN(testInput)) {
-    return "Not A number"
+    return "Not a Number"
    } else if (testInput.toString().match(numTest)) {
     return "Is a Number"
    }
@@ -36,7 +36,7 @@ function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
         
     if (validateInput(pilot.value) === "Empty" || validateInput(copilot.value) === "Empty" || validateInput(fuelLevel.value) === "Empty" || validateInput(cargoLevel.value) === "Empty") {
         alert("All fields are required!");
-    } else if (validateInput(fuelLevel.value) === "Not A number" || validateInput(cargoLevel.value) === "Not A number") {
+    } else if (validateInput(fuelLevel.value) === "Not a Number" || validateInput(cargoLevel.value) === "Not a Number") {
         alert("Make sure to enter valid information for each field!")
     } else {
         list.style.visibility = "visible"
