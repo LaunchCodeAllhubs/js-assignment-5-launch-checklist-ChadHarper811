@@ -7,14 +7,13 @@ function addDestinationInfo(document, name, diameter, star, distance, moons, ima
    missionTarget.innerHTML = `
    <h2>Mission Destination</h2>
    <ol>
-       <li>Name: ${missionPlanet.name}</li>
-       <li>Diameter: ${missionPlanet.diameter}</li>
-       <li>Star: ${missionPlanet.star}</li>
-       <li>Distance from Earth: ${missionPlanet.distance}</li>
-       <li>Number of Moons: ${missionPlanet.moons}</li>
+       <li>Name: ${name}</li>
+       <li>Diameter: ${diameter}</li>
+       <li>Star: ${star}</li>
+       <li>Distance from Earth: ${distance}</li>
+       <li>Number of Moons: ${moons}</li>
    </ol>
-   <img src=${missionPlanet.image} />
-   `
+   <img src="${imageUrl}" />`
 }
 
 function validateInput(testInput) {
@@ -29,43 +28,33 @@ function validateInput(testInput) {
 }
 
 function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
-    
-    
-    let form = document.querySelector("form");
-    form.addEventListener("submit", function(event) {
-
-        const launchStatus = document.getElementById("launchStatus")
-        const pilotStatus = document.getElementById("pilotStatus")
-        const copilotStatus = document.getElementById("copilotStatus")
-        const fuelStatus = document.getElementById("fuelStatus")
-        const cargoStatus = document.getElementById("cargoStatus")
+    const launchStatus = document.getElementById("launchStatus")
+    const pilotStatus = document.getElementById("pilotStatus")
+    const copilotStatus = document.getElementById("copilotStatus")
+    const fuelStatus = document.getElementById("fuelStatus")
+    const cargoStatus = document.getElementById("cargoStatus")
         
-        if (validateInput(pilot.value) === "Empty" || validateInput(copilot.value) === "Empty" || validateInput(fuelLevel.value) === "Empty" || validateInput(cargoLevel.value) === "Empty") {
-            alert("All fields are required!");
-            event.preventDefault();
-        } else if (validateInput(fuelLevel.value) === "Not A number" || validateInput(cargoLevel.value) === "Not A number") {
-            alert("Make sure to enter valid information for each field!")
-            event.preventDefault();
+    if (validateInput(pilot.value) === "Empty" || validateInput(copilot.value) === "Empty" || validateInput(fuelLevel.value) === "Empty" || validateInput(cargoLevel.value) === "Empty") {
+        alert("All fields are required!");
+    } else if (validateInput(fuelLevel.value) === "Not A number" || validateInput(cargoLevel.value) === "Not A number") {
+        alert("Make sure to enter valid information for each field!")
+    } else {
+        list.style.visibility = "visible"
+        pilotStatus.innerHTML = `Pilot ${pilot.value} is ready for launch`
+        copilotStatus.innerHTML = `Pilot ${copilot.value} is ready for launch`
+        if (fuelLevel.value < 10000) {
+            fuelStatus.innerHTML = "Fuel Level too low for launch"
+            launchStatus.innerHTML = "Shuttle Not Ready for Launch"
+            launchStatus.style.color = "rgb(199, 37, 78)"
+        } else if (cargoLevel.value > 10000) {
+            cargoStatus.innerHTML = "Cargo mass too heavy for launch"
+            launchStatus.innerHTML = "Shuttle Not Ready for Launch"
+            launchStatus.style.color = "rgb(199, 37, 78)"
         } else {
-            event.preventDefault();
-            list.style.visibility = "visible"
-            pilotStatus.innerHTML = `Pilot ${pilot.value} is ready for launch`
-            copilotStatus.innerHTML = `Pilot ${copilot.value} is ready for launch`
-            if (fuelLevel.value < 10000) {
-                fuelStatus.innerHTML = "Fuel Level too low for launch"
-                launchStatus.innerHTML = "Shuttle Not Ready for Launch"
-                launchStatus.style.color = "rgb(199, 37, 78)"
-            } else if (cargoLevel.value > 10000) {
-                cargoStatus.innerHTML = "Cargo mass too heavy for launch"
-                launchStatus.innerHTML = "Shuttle Not Ready for Launch"
-                launchStatus.style.color = "rgb(199, 37, 78)"
-            } else {
-                launchStatus.style.color = "rgb(65, 159, 106)"
-                launchStatus.innerHTML = "Shuttle is Ready for Launch"
-            }
+            launchStatus.style.color = "rgb(65, 159, 106)"
+            launchStatus.innerHTML = "Shuttle is Ready for Launch"
         }
-        
-    });
+    }
 }
 
    
@@ -74,13 +63,16 @@ function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
     
 
 async function myFetch() {
-    let response = await fetch('https://handlers.education.launchcode.org/static/planets.json');
-    let planetsData = await response.json();
-    console.log(planetsData);
+        let response = await fetch('https://handlers.education.launchcode.org/static/planets.json');
+        let planetsData = await response.json();
+        return planetsData
 }
 
+
+
+
 function pickPlanet(planets) {
-    return Math.floor(Math.random()*planets)
+    return planets[Math.floor(Math.random()*planets.length)]
 }
 
 
